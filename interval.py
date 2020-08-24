@@ -1,11 +1,15 @@
 class Interval:
 
-    def __init__(self, manufacturingTime, flightTestingTime):
+    def __init__(self, id, manufacturingTime, flightTestingTime):
+        self.id = id
         self.manufacturingTime = manufacturingTime
         self.flightTestingTime = flightTestingTime
 
-    def manufacturingTime(self):
+    def getManufacturingTime(self):
         return self.manufacturingTime
 
-    def flightTestingTime(self):
+    def getFlightTestingTime(self):
         return self.flightTestingTime
+
+    def getId(self):
+        return self.id
