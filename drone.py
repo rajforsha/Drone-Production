@@ -17,7 +17,7 @@ class Drone:
         for line in lines:
             data = line.strip('\n').strip().split('/')
             # list index starts from 0
-            self.intervals[int(data[0]) - 1] = Interval(int(data[0]), int(data[1]), int(data[2]))
+            self.intervals[int(data[0].strip()) - 1] = Interval(int(data[0].strip()), int(data[1].strip()), int(data[2].strip()))
 
         self.outputResultList.append("initial data:")
         self.outputResultList.append("Id    manufacturing time      flight testing time")
@@ -26,8 +26,13 @@ class Drone:
                 interval.getFlightTestingTime()))
 
     def scheduleTask(self):
+        """
+        there is just one unit, so at a time only one drone can be manufactured and we have one unit for testing, so
+        only one unit can be tested.
+        :return:
+        """
         # we need to schedule all the drone in minimum time
-        # sorting based on flight testing time
+        # sorting based on manufacturing Time
         scheduled_tasks = []  # list to represent all the scheduled task
         interval_list = list(self.intervals)
         interval_list.sort(key=lambda x: x.manufacturingTime)  # so that we know which drone will be manufactured first
@@ -37,6 +42,11 @@ class Drone:
             self.outputResultList.append(
                 str(interval.getId()) + '\t' + str(interval.getManufacturingTime()) + '\t' + str(interval.getFlightTestingTime()))
 
+        id_list = []
+        for interval in interval_list:
+            id_list.append(str(interval.getId()))
+
+        self.outputResultList.append("Drones should be produced in the order:"+ ','.join(id_list))
         last = -sys.maxsize
         for interval in interval_list:
             if last > 0:
@@ -46,7 +56,7 @@ class Drone:
             for time_unit in range(interval.getManufacturingTime()):
                 scheduled_tasks.append(interval.getId())
 
-            last = max(interval.getFlightTestingTime(), len(scheduled_tasks))
+            last = interval.getFlightTestingTime()
 
         self.outputResultList.append(str(scheduled_tasks))
         self.outputResultList.append(str(len(scheduled_tasks)))

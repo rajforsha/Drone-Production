@@ -7,7 +7,7 @@ class Utils:
 
     # Given a list, writes to file
     def writeToOutputFile(self, filepath, data):
-        with open(filepath, 'a') as file:
+        with open(filepath, 'w') as file:
             for line in data:
                 file.write(line + '\n')
             file.write('\n\n')
