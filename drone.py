@@ -27,7 +27,6 @@ class Drone:
         """
         # we need to schedule all the drone in minimum time
         # sorting based on increasing order of manufacturing Time
-        scheduled_tasks = []  # list to represent all the scheduled task
         interval_list = list(self.intervals)
         interval_list.sort(
             key=lambda x: x.manufacturingTime)  # so that we know which drone will be manufactured first based on time
@@ -39,27 +38,24 @@ class Drone:
         self.outputResultList.append("Drones should be produced in the order:" + ','.join(id_list))
 
         # now we need to schedule all the task and corresponding for the flight testing
-        flight_testing_schedule = []
+        # manufacturing is done only if flight testing is done
+        schedule = []
         last_flight_testing_time = None
         for interval in interval_list:
-            # this is total time for manufacturing
-            for time_unit in range(interval.getManufacturingTime()):
-                scheduled_tasks.append(interval.getId())
-
             # now we need to schedule for flight testing
             if last_flight_testing_time is not None:
                 while last_flight_testing_time <= interval.getManufacturingTime():
-                    flight_testing_schedule.append('IDLE')
+                    schedule.append('IDLE')
                     last_flight_testing_time += 1
 
             for time_unit in range(interval.getFlightTestingTime()):
-                flight_testing_schedule.append(interval.getId())
+                schedule.append(interval.getId())
 
-            last_flight_testing_time = len(flight_testing_schedule)
+            last_flight_testing_time = len(schedule)
 
         self.outputResultList.append(
-            'Total production time for all drones is:' + str(max(len(flight_testing_schedule), len(scheduled_tasks))))
-        idle_time_unit = lambda x: x == 'IDLE', flight_testing_schedule
+            'Total production time for all drones is:' + str(len(schedule)))
+        idle_time_unit = lambda x: x == 'IDLE', schedule
         self.outputResultList.append('Idle time of flight testing unit:' + str(len(idle_time_unit)))
         self.utils.writeToOutputFile(self.outputFile, self.outputResultList)
 
