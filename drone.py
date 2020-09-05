@@ -1,8 +1,21 @@
 from utils import Utils
 from interval import Interval
 
+"""
+This is the main drone class where we are doing 2 things
+ 1. we are reading the input file and creating array of intervals
+ 2. we are scheduling and finding the total time we need for the production.
+"""
+
 
 class Drone:
+
+    """
+    This is the init method, we are initializing the input and output file path
+    we are using utils method to read and write to the specified files
+    we are initializing list of intervals with None
+    we have created an empty array where we will add all the output lines.
+    """
     def __init__(self):
         self.inputFile = './inputPS6.txt'
         self.outputFile = './outputPS6.txt'
@@ -11,6 +24,9 @@ class Drone:
         self.outputResultList = []
 
     def readInputFromInputFile(self):
+        """
+        we are using this method to read the input file and create the interval list
+        """
         lines = self.utils.readFromInputFile(self.inputFile)
         self.intervals = [Interval] * len(lines)
         for line in lines:
@@ -38,7 +54,7 @@ class Drone:
         self.outputResultList.append("Drones should be produced in the order:" + ','.join(id_list))
 
         # now we need to schedule all the task and corresponding for the flight testing
-        # manufacturing is done only if flight testing is done
+        # drone production is completed only if flight testing is done
         schedule = []
         last_flight_testing_time = None
         for interval in interval_list:
@@ -61,6 +77,9 @@ class Drone:
 
 
 if __name__ == '__main__':
+    """
+    this is the main method from where we create the drone object and perform the 2 operation
+    """
     ob = Drone()
     ob.readInputFromInputFile()
     ob.scheduleTask()
